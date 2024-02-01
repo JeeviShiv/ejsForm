@@ -1,0 +1,53 @@
+<header><%-include('header');%></header>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>Order History</h2>
+      </div>
+        <div class="row">
+            <div class="col-md-12 order-md-1">   
+                <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email Id</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Product Purchased</th>
+                    <th scope="col">Order Placed</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Send mail</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%if(data.length==0){%>
+                    <tr>
+                        <td colspan="8">No records found</td>
+                    </tr>
+                <%}%>
+                <%for(i=0;i<data.length;i++){
+                var statusClass = '';
+                var status = helper.getOrderStatus(data[i].orderedDate);
+                if(status=='Delivered'){statusClass='success'}
+                else if(status=='Dispatched'){statusClass='secondary'}
+                else statusClass='warning';
+                %> 
+                <tr>
+                    <th scope="row"><%-i+1%></th>
+                    <td><%-data[i].firstName%></td>
+                    <td><%-data[i].lastName%></td>
+                    <td><%-data[i].email%></td>
+                    <td><%-data[i].address%></td>
+                    <td><%-data[i].products%></td>
+                    <td><%-helper.formatDate(data[i].orderedDate);%></td>
+                    <td><span class="badge badge-<%-statusClass%>"><%-status%></span></td>
+                    <td><button type="button" class="btn btn-primary btn-sm" onclick=<%helper.SendMail(data[i])%>>Send email</button></td>
+                </tr>
+            <%}%> 
+                </tbody>
+            </table>
+        </div>
+  </div>
+</div>
+
+<footer><%-include('footer');%></footer>
